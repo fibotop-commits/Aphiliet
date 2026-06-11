@@ -178,6 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         videoContainer.innerHTML = videoFeedHTML;
 
+        // Bắt buộc TikTok render lại các thẻ blockquote vừa sinh ra động bằng Javascript
+        const script = document.createElement('script');
+        script.src = "https://www.tiktok.com/embed.js";
+        script.async = true;
+        document.body.appendChild(script);
+
         // --- Render Tab 2: Product Gallery ---
         let allProducts = [];
         videosData.forEach(video => {
