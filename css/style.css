@@ -1,0 +1,323 @@
+/* =========================================
+   VARIABLES & RESET
+========================================= */
+:root {
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --primary-color: #1a73e8;
+    --border-color: #e0e0e0;
+    
+    /* Màu nền tảng */
+    --shopee-color: #ee4d2d;
+    --tiktok-color: #000000;
+    
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* =========================================
+   HEADER & NAVIGATION
+========================================= */
+.main-header {
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 10px 0;
+}
+
+.logo {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn i {
+    margin-right: 5px;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* =========================================
+   LAYOUTS
+========================================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Feed Layout (Tab Video) */
+.feed-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 600px; /* Tối ưu cho hiển thị Feed như điện thoại/bảng tin */
+    margin: 0 auto;
+}
+
+/* =========================================
+   VIDEO CARDS
+========================================= */
+.video-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.video-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.video-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* Tỉ lệ 16:9 cho video ngang. Sẽ điều chỉnh bằng JS nếu video dọc */
+    height: 0;
+    background: #000;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.video-products-list {
+    padding: 15px;
+    background-color: #fafafa;
+}
+
+.video-products-list h4 {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   PRODUCT CARDS (Dùng chung cho cả 2 tab)
+========================================= */
+.product-item {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.product-img {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #d0021b;
+}
+
+.btn-buy {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: filter 0.2s;
+}
+
+.btn-buy:hover {
+    filter: brightness(1.1);
+}
+
+.btn-shopee {
+    background-color: var(--shopee-color);
+}
+
+.btn-tiktok {
+    background-color: var(--tiktok-color);
+}
+
+/* Hiệu ứng nhịp đập cho nút Mua */
+.btn-buy.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% { box-shadow: 0 0 0 0 rgba(238, 77, 45, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(238, 77, 45, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(238, 77, 45, 0); }
+}
+
+
+/* =========================================
+   TAB SẢN PHẨM (GRID) & BỘ LỌC
+========================================= */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-label {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.filter-btn {
+    padding: 6px 15px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    background: #f0f0f0;
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* =========================================
+   MEDIA QUERIES (Mobile tối ưu)
+========================================= */
+@media (max-width: 600px) {
+    .grid-layout {
+        /* Trên điện thoại chia làm 1 cột full hoặc 2 cột nhỏ */
+        grid-template-columns: 1fr;
+    }
+    
+    .product-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .product-img {
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .btn-buy {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
