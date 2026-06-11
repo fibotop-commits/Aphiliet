@@ -57,7 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     let code = row[2].trim();
                     // Nếu user dán nhầm link thường thay vì iframe, tự tạo iframe cho user
                     if (code.startsWith('http') && !code.includes('<iframe')) {
-                        code = `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(code)}&show_text=false&width=auto" width="100%" height="400" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
+                        // Nhận diện Facebook Reels (thường bị chặn Iframe)
+                        if (code.includes('/reel/') || code.includes('/share/r/')) {
+                            code = `
+                            <div style="background: #f0f2f5; display:flex; flex-direction:column; align-items:center; justify-content:center; height: 100%; min-height: 250px; text-align:center; padding: 20px;">
+                                <i class="fa-brands fa-facebook" style="font-size: 3rem; color: #0866ff; margin-bottom: 15px;"></i>
+                                <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #1c1e21;">Video Reels của Facebook</h3>
+                                <p style="font-size: 0.9rem; color: #65676b; margin-bottom: 20px;">Video này chứa bản quyền âm nhạc, vui lòng xem trực tiếp trên Facebook.</p>
+                                <a href="${code}" target="_blank" rel="noopener noreferrer" style="background: #0866ff; color: white; padding: 10px 24px; border-radius: 20px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở Facebook Xem Ngay
+                                </a>
+                            </div>`;
+                        } else {
+                            code = `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(code)}&show_text=false&width=auto" width="100%" height="400" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
+                        }
                     }
                     currentEmbedCode = code;
                 }
