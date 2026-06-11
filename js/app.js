@@ -119,14 +119,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========================================================================
     // 3. HIỂN THỊ LÊN GIAO DIỆN CHÍNH
     // ========================================================================
-    function renderApp(videosData) {
+    async function renderApp(videosData) {
         // --- Render Tab 1: Video Feed ---
         let videoFeedHTML = '';
-        videosData.forEach(video => {
+        for (const video of videosData) {
             let productsHTML = '';
-            video.products.forEach(product => {
-                productsHTML += createProductHTML(product);
-            });
+            for (const product of video.products) {
+                productsHTML += await createProductHTML(product);
+            }
 
             const productSection = productsHTML ? `
                 <div class="video-products-list">
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${productSection}
                 </article>
             `;
-        });
+        }
         videoContainer.innerHTML = videoFeedHTML;
 
         // --- Render Tab 2: Product Gallery ---
@@ -165,27 +165,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let galleryHTML = '';
-        uniqueProducts.forEach(product => {
-            galleryHTML += createProductHTML(product);
-        });
+        for (const product of uniqueProducts) {
+            galleryHTML += await createProductHTML(product);
+        }
         galleryContainer.innerHTML = galleryHTML || '<div style="padding:20px;text-align:center;">Chưa có sản phẩm nào.</div>';
 
         setupEvents();
     }
 
-    function createProductHTML(product) {
+    async function createProductHTML(product) {
         const isShopee = product.platform.includes('shopee');
         const btnClass = isShopee ? 'btn-shopee' : 'btn-tiktok';
         const iconClass = isShopee ? 'fa-bag-shopping' : 'fa-tiktok';
         const btnText = isShopee ? 'Mua trên Shopee' : 'Mua trên TikTok';
         const pulseClass = isShopee ? 'pulse' : ''; // Hiệu ứng nhịp đập
 
-        // Hình ảnh mặc định nếu để trống
-        const img = product.imageUrl || 'https://via.placeholder.com/100?text=No+Image';
+        let finalImgUrl = product.imageUrl;
+
+        // TỰ ĐỘNG LẤY ẢNH TỪ LINK NẾU ĐỂ TRỐNG (GIỐNG FACEBOOK LINK PREVIEW)
+        if (!finalImgUrl || finalImgUrl.trim() === '') {
+            try {
+                const res = await fetch('https://api.microlink.io/?url=' + encodeURIComponent(product.affiliateLink));
+                const data = await res.json();
+                if (data.status === 'success') {
+                    finalImgUrl = data.data?.image?.url || data.data?.logo?.url || 'https://via.placeholder.com/100?text=No+Image';
+                }
+            } catch (e) {
+                finalImgUrl = 'https://via.placeholder.com/100?text=No+Image';
+            }
+        }
 
         return `
             <div class="product-item" data-platform="${product.platform}">
-                <img src="${img}" alt="${product.name}" class="product-img" loading="lazy">
+                <img src="${finalImgUrl}" alt="${product.name}" class="product-img" loading="lazy">
                 <div class="product-info">
                     <h3 class="product-name" title="${product.name}">${product.name}</h3>
                     <div class="product-price">${product.price}</div>
